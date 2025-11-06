@@ -6,7 +6,7 @@
 /*   By: dbinti-m <dbinti-m@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 00:19:16 by dbinti-m          #+#    #+#             */
-/*   Updated: 2025/11/06 00:19:19 by dbinti-m         ###   ########.fr       */
+/*   Updated: 2025/11/07 01:13:07 by dbinti-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,21 @@
 
 static int	g_ack_received = 0;
 
-void	ack_handler(int signal)
+static void	ack_handler(int signal)
 {
-	(void)signal;
-	g_ack_received = 1;
+	if (signal == SIGUSR1)
+		g_ack_received = 1;
+	else if (signal == SIGUSR2)
+	{
+		ft_putstr_fd("Message sent successfully!\n", 1);
+		exit(EXIT_SUCCESS);
+	}
 }
 
-void	send_char_bonus(int pid, unsigned char c)
+static void	send_char_bonus(int pid, unsigned char c)
 {
 	int	bit;
 	int	mask;
-	int	timeout;
 
 	bit = 7;
 	while (bit >= 0)
@@ -35,19 +39,13 @@ void	send_char_bonus(int pid, unsigned char c)
 			kill(pid, SIGUSR2);
 		else
 			kill(pid, SIGUSR1);
-		timeout = 0;
-		while (!g_ack_received && timeout++ < 1000)
+		while (!g_ack_received)
 			usleep(10);
-		if (!g_ack_received)
-		{
-			ft_putstr_fd("Error: No acknowledgment from server\n", 2);
-			exit(1);
-		}
 		bit--;
 	}
 }
 
-void	send_string_bonus(int pid, char *str)
+static void	send_string_bonus(int pid, char *str)
 {
 	int	i;
 
@@ -78,7 +76,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	sa.sa_handler = ack_handler;
-	sa.sa_flags = SA_RESTART;
+	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	ft_putstr_fd("Sending message...\n", 1);
