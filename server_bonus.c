@@ -6,7 +6,7 @@
 /*   By: dbinti-m <dbinti-m@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 00:21:04 by dbinti-m          #+#    #+#             */
-/*   Updated: 2025/11/07 01:21:37 by dbinti-m         ###   ########.fr       */
+/*   Updated: 2025/11/07 02:03:52 by dbinti-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	signal_handler_bonus(int signal, siginfo_t *info, void *context)
 {
-	static int	bit_count = 0;
+	static int				bit_count = 0;
 	static unsigned char	current_char = 0;
 
 	(void)context;

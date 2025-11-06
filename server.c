@@ -6,26 +6,25 @@
 /*   By: dbinti-m <dbinti-m@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 00:21:23 by dbinti-m          #+#    #+#             */
-/*   Updated: 2025/11/07 01:14:44 by dbinti-m         ###   ########.fr       */
+/*   Updated: 2025/11/07 02:09:05 by dbinti-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-
 static void	signal_handler(int signal, siginfo_t *info, void *context)
 {
-	static int	bit_count = 0;
+	static int				bit_count = 0;
 	static unsigned char	current_char = 0;
 
 	(void)context;
 	current_char <<= 1;
-	if (signal ==SIGUSR2)
+	if (signal == SIGUSR2)
 		current_char |= 1;
 	bit_count++;
 	if (bit_count == 8)
 	{
-		if(current_char)
+		if (current_char)
 			ft_putchar(current_char);
 		else
 			ft_putchar('\n');
